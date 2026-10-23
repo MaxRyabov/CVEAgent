@@ -1,0 +1,15 @@
+name: Предложение
+description: Новый источник, критерий, формат отчёта или функция страницы
+labels: ["улучшение"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что добавить или изменить
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Зачем
+      description: Какую проблему решает, пример ситуации

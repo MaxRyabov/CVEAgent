@@ -1,0 +1,34 @@
+name: Ошибка в отчёте
+description: Пропущенная CVE, неверный CVSS/версия/патч, ложное срабатывание
+labels: ["отчёт"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Тип ошибки
+      options:
+        - Пропущена CVE
+        - Неверные данные (CVSS, версия, дата, патч)
+        - Неверный вывод «затронута / не затронута»
+        - Ложное срабатывание или дубль
+        - Другое
+    validations:
+      required: true
+  - type: input
+    id: cve
+    attributes:
+      label: CVE
+      placeholder: CVE-2026-12345
+  - type: textarea
+    id: excerpt
+    attributes:
+      label: Фрагмент отчёта и дата запуска
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Как должно быть и первоисточник
+      description: Ссылка на NVD, бюллетень вендора, Debian tracker и т. п.
+    validations:
+      required: true

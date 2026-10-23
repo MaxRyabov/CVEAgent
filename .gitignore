@@ -1,1 +1,13 @@
+# Локальные данные: реальная инвентаризация и состояние не коммитятся
+data/*.local.json
+reports/local/
+.env
+*.zip
 *.patch
+
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

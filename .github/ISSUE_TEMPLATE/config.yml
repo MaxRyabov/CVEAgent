@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Сообщить об уязвимости в агенте
+    url: https://github.com/MaxRyabov/CVEAgent/security/advisories/new
+    about: Приватно, не через публичный issue (см. SECURITY.md)
