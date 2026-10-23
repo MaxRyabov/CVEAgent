@@ -28,6 +28,7 @@ flowchart LR
 | Компонент | Файл в репозитории | Где живёт |
 |---|---|---|
 | Промпт агента | `prompt/routine-prompt.md` | Scheduled task в Claude |
+| Промпт для локального запуска и других агентов | `prompt/routine-prompt.local.md` | Данные в `data/*.local.json` |
 | Расписание и настройки | `schedule.json` | Scheduled task в Claude |
 | Страница со списком ПО | `artifact/watchlist.html` | Артефакт claude.ai с capability `db` |
 | Список ПО (снимок) | `data/software.json` | Коллекция `software` артефакта |
@@ -40,6 +41,14 @@ flowchart LR
 - `state/last` — `lastRunAt` (ISO-время прошлого запуска, задаёт окно поиска) и `reportedIds` (последние 500 CVE, уже попавших в отчёты).
 
 ## Как развернуть у себя
+
+| Где запускать | Инструкция |
+|---|---|
+| Приложение Claude (Cowork) | ниже в этом разделе |
+| Claude Code: облачная задача (`/schedule`) или локальная в Claude Desktop | [docs/claude-code.md](docs/claude-code.md) |
+| Hermes Agent, OpenClaw и другие агенты с cron | [docs/other-agents.md](docs/other-agents.md) |
+
+### Приложение Claude (Cowork)
 
 Нужен аккаунт Claude с Cowork, артефактами и scheduled tasks.
 
