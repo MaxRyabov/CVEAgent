@@ -1,0 +1,42 @@
+[
+  {
+    "id": "kerio-control",
+    "name": "Kerio Control",
+    "version": "9.5.0",
+    "kind": "Сетевое устройство",
+    "note": "UTM-шлюз GFI Kerio Control — сверять с бюллетенями GFI и учитывать патчи (Patch N) внутри версии",
+    "enabled": true
+  },
+  {
+    "id": "mikrotik-routeros",
+    "name": "MikroTik RouterOS",
+    "version": "6.49.23",
+    "kind": "Сетевое устройство",
+    "note": "Роутер MikroTik, ветка RouterOS v6 — проверять и CVE, общие для v6/v7, и changelog/бюллетени MikroTik",
+    "enabled": true
+  },
+  {
+    "id": "mikrotik-routeros-msk",
+    "name": "MikroTik RouterOS (Москва)",
+    "version": "7.24.5",
+    "kind": "Сетевое устройство",
+    "note": "Расположение: Москва (второй роутер MikroTik). Ветка RouterOS v7 — проверять бюллетени MikroTik и changelog",
+    "enabled": true
+  },
+  {
+    "id": "nginx-deb13",
+    "name": "nginx",
+    "version": "1.26.3-3+deb13u10",
+    "kind": "Сервер / сервис",
+    "note": "Пакет Debian 13 (trixie): фиксы бэкпортируются — статус сверять по Debian Security Tracker, а не по upstream-версии",
+    "enabled": true
+  },
+  {
+    "id": "wireguard",
+    "name": "WireGuard",
+    "version": "1.0.20200513",
+    "kind": "Сервер / сервис",
+    "note": "Версия в формате wireguard-tools (wg, wg-quick); туннель обычно в ядре Linux — проверять и wireguard-tools, и CVE модуля wireguard в ядре",
+    "enabled": true
+  }
+]

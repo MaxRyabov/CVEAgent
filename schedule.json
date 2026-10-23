@@ -1,0 +1,11 @@
+{
+  "name": "Мониторинг CVE",
+  "cron_expression": "CRON_TZ=Europe/Moscow 45 8,20 * * *",
+  "model": "claude-opus-5-5",
+  "notifications": {
+    "push": true,
+    "email": false
+  },
+  "requires_local_device": false,
+  "prompt_file": "prompt/routine-prompt.md"
+}

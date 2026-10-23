@@ -1,0 +1,192 @@
+<title>CVE Watchlist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one narrow working column — rules strip, add form, inventory list */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --ink:#151a24; --muted:#5d6577; --line:#dde1ea;
+  --accent:#2c4bb0; --accent-ink:#ffffff; --accent-soft:#e6ebfa;
+  --crit:#b3261e; --crit-soft:#fbe9e7; --high:#9a5b00; --high-soft:#fdf1dc; --ok:#2e6b3a;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1218; --surface:#171b24; --ink:#e6e9f0; --muted:#98a0b3; --line:#2a303d;
+  --accent:#8aa3ff; --accent-ink:#0f1218; --accent-soft:#1f2740;
+  --crit:#ff8a80; --crit-soft:#3a1d1b; --high:#f2b45c; --high-soft:#3a2b14; --ok:#7fc98d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1218; --surface:#171b24; --ink:#e6e9f0; --muted:#98a0b3; --line:#2a303d;
+  --accent:#8aa3ff; --accent-ink:#0f1218; --accent-soft:#1f2740;
+  --crit:#ff8a80; --crit-soft:#3a1d1b; --high:#f2b45c; --high-soft:#3a2b14; --ok:#7fc98d; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:22px}
+h1{font-size:1.75rem;font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rule{background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.rule .v{font-family:var(--f-mono);font-size:.95rem}
+.sev{display:inline-block;font-family:var(--f-mono);font-size:.78rem;padding:1px 7px;border-radius:4px}
+.sev.c{background:var(--crit-soft);color:var(--crit)} .sev.h{background:var(--high-soft);color:var(--high)}
+@media (max-width:560px){.rules{grid-template-columns:1fr}}
+section h2{font-size:1.05rem;margin:0 0 10px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+section h2 .count{color:var(--muted);font-weight:400;font-size:.9rem}
+form{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:10px}
+form .full{grid-column:1/-1}
+@media (max-width:560px){form{grid-template-columns:1fr 1fr} form .name{grid-column:1/-1}}
+label{display:flex;flex-direction:column;gap:4px;min-width:0}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0;width:100%;box-sizing:border-box}
+input.mono{font-family:var(--f-mono);font-size:.9rem}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:disabled{opacity:.5;cursor:not-allowed}
+.msg{color:var(--muted);font-size:.88rem}
+.msg.err{color:var(--crit)}
+ul.list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+ul.list li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
+ul.list li:first-child{border-top:0}
+ul.list li.off .main{opacity:.5}
+.main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.title{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.title strong{font-weight:600;overflow-wrap:anywhere}
+.ver{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+.kind{font-size:.72rem;color:var(--accent);background:var(--accent-soft);padding:1px 7px;border-radius:999px}
+.note{font-size:.86rem;color:var(--muted);overflow-wrap:anywhere}
+.switch{position:relative;width:34px;height:20px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%}
+.switch span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:background .15s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--surface);transition:transform .15s}
+.switch input:checked+span{background:var(--ok)}
+.switch input:checked+span::after{transform:translateX(14px)}
+.switch input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.rowact{display:flex;gap:6px}
+.rowact button{padding:5px 9px;font-size:.84rem}
+button.danger{color:var(--crit);border-color:var(--crit)}
+.empty{padding:22px 16px;color:var(--muted);text-align:left;background:var(--surface);border:1px dashed var(--line);border-radius:10px}
+.empty strong{color:var(--ink);display:block;margin-bottom:4px}
+footer{color:var(--muted);font-size:.84rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Мониторинг CVE</h1>
+    <p class="lede">Список ПО, по которому задача дважды в день делает отдельный анализ уязвимостей. Пустой список — в отчёте только общая сводка критичных CVE.</p>
+  </header>
+
+  <div class="rules" aria-label="Параметры задачи">
+    <div class="rule"><span class="lbl">Запуск</span><span class="v">08:45 · 20:45 МСК</span></div>
+    <div class="rule"><span class="lbl">Общий обзор</span><span><span class="sev c">CVSS ≥ 9.0</span> + KEV / эксплойт</span></div>
+    <div class="rule"><span class="lbl">Ваше ПО</span><span><span class="sev h">CVSS ≥ 7.0</span> + проверка версии</span></div>
+  </div>
+
+  <section>
+    <h2>Добавить ПО</h2>
+    <form id="addForm" autocomplete="off">
+      <label class="name"><span class="lbl">Продукт</span><input id="f-name" required maxlength="120" placeholder="1С-Битрикс: Управление сайтом"></label>
+      <label><span class="lbl">Версия</span><input id="f-ver" class="mono" maxlength="60" placeholder="24.100.0"></label>
+      <label><span class="lbl">Тип</span>
+        <select id="f-kind">
+          <option>Приложение</option><option>Веб-платформа / CMS</option><option>Сервер / сервис</option>
+          <option>ОС</option><option>Библиотека / пакет</option><option>Сетевое устройство</option>
+        </select></label>
+      <label class="full"><span class="lbl">Заметка (необязательно)</span><input id="f-note" maxlength="200" placeholder="Где стоит, чем открыт наружу, вендор, CPE"></label>
+      <div class="full actions"><button class="primary" id="addBtn" type="submit">Добавить</button><span class="msg" id="formMsg" role="status"></span></div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Отслеживается <span class="count mono" id="count"></span></h2>
+    <div id="listHost">
+      <div class="empty" id="emptyState"><strong>Список пуст</strong>Добавьте продукт формой выше — с ближайшего запуска в отчёте появится раздел по нему. Версию лучше указать: тогда задача проверит, попадает ли она в уязвимый диапазон.</div>
+    </div>
+  </section>
+
+  <footer>Выключенный переключатель оставляет продукт в списке, но задача его пропускает.</footer>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const host=$('listHost'), msg=$('formMsg'), btn=$('addBtn');
+  let col=null, items=[], pendingDelete=null, canWrite=true;
+
+  function setMsg(t,err){msg.textContent=t||'';msg.className='msg'+(err?' err':'');}
+
+  function render(){
+    $('count').textContent=items.length? String(items.length):'';
+    host.textContent='';
+    if(!items.length){
+      const e=document.createElement('div');e.className='empty';
+      e.innerHTML='<strong>Список пуст</strong>';
+      e.append('Добавьте продукт формой выше — с ближайшего запуска в отчёте появится раздел по нему. Версию лучше указать: тогда задача проверит, попадает ли она в уязвимый диапазон.');
+      host.append(e);return;
+    }
+    const ul=document.createElement('ul');ul.className='list';
+    items.forEach(it=>{
+      const li=document.createElement('li'); if(it.enabled===false) li.classList.add('off');
+      const sw=document.createElement('label');sw.className='switch';sw.title='Проверять';
+      const cb=document.createElement('input');cb.type='checkbox';cb.id='en-'+it.id;cb.checked=it.enabled!==false;cb.disabled=!canWrite;
+      cb.setAttribute('aria-label','Проверять '+it.name);
+      cb.addEventListener('change',()=>write(()=>col.doc(it.id).update({enabled:cb.checked})));
+      sw.append(cb,document.createElement('span'));
+      const main=document.createElement('div');main.className='main';
+      const t=document.createElement('div');t.className='title';
+      const n=document.createElement('strong');n.textContent=it.name;t.append(n);
+      if(it.version){const v=document.createElement('span');v.className='ver';v.textContent=it.version;t.append(v);}
+      if(it.kind){const k=document.createElement('span');k.className='kind';k.textContent=it.kind;t.append(k);}
+      main.append(t);
+      if(it.note){const no=document.createElement('div');no.className='note';no.textContent=it.note;main.append(no);}
+      const act=document.createElement('div');act.className='rowact';
+      if(pendingDelete===it.id){
+        const y=document.createElement('button');y.className='danger';y.textContent='Удалить';
+        y.addEventListener('click',()=>{pendingDelete=null;write(()=>col.doc(it.id).delete());});
+        const c=document.createElement('button');c.textContent='Отмена';
+        c.addEventListener('click',()=>{pendingDelete=null;render();});
+        act.append(y,c);
+      }else{
+        const d=document.createElement('button');d.textContent='Удалить';d.disabled=!canWrite;
+        d.setAttribute('aria-label','Удалить '+it.name);
+        d.addEventListener('click',()=>{pendingDelete=it.id;render();});
+        act.append(d);
+      }
+      li.append(sw,main,act);ul.append(li);
+    });
+    host.append(ul);
+  }
+
+  async function write(fn){
+    try{await fn();setMsg('');}
+    catch(e){
+      if(e&&e.code==='invalid_argument'){canWrite=false;btn.disabled=true;setMsg('У вас нет прав менять этот список.',true);render();}
+      else if(e&&e.code==='quota_exceeded'){setMsg('Список переполнен — удалите лишние записи.',true);}
+      else setMsg('Не удалось сохранить, попробуйте ещё раз.',true);
+    }
+  }
+
+  $('addForm').addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    if(!col){setMsg('Хранилище недоступно в этом окне.',true);return;}
+    const name=$('f-name').value.trim(); if(!name){setMsg('Укажите название продукта.',true);return;}
+    btn.disabled=true;
+    await write(()=>col.add({name,version:$('f-ver').value.trim(),kind:$('f-kind').value,note:$('f-note').value.trim(),enabled:true,addedAt:new Date().toISOString()}));
+    if(canWrite){btn.disabled=false;$('f-name').value='';$('f-ver').value='';$('f-note').value='';$('f-name').focus();if(!msg.classList.contains('err'))setMsg('Добавлено');}
+  });
+
+  (async()=>{
+    let db=null;
+    try{db=window.claude&&await window.claude.use('db');}catch(e){db=null;}
+    if(!db){btn.disabled=true;setMsg('Список доступен только при входе в claude.ai.',true);return;}
+    col=db.collection('software');
+    col.orderBy('addedAt','asc').onSnapshot(s=>{
+      items=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();
+    },()=>{setMsg('Связь с хранилищем потеряна — обновите страницу.',true);});
+  })();
+})();
+</script>
